@@ -10,8 +10,8 @@ app.use(
 app.use(cors());
 // const cookieParser = require('cookie-parser');
 const fileUpload = require("express-fileupload");
-// middelwar
-// app.use(cookieParser())
+middelwar
+app.use(cookieParser())
 app.use(express.json());
 
 app.use(fileUpload());
