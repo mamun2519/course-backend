@@ -2,6 +2,7 @@ const CoursesDB = require("../modal/coursesModal");
 const cloudinary = require("cloudinary");
 const generateDiscountCode = require("../utilities/generateCuponCode");
 const saveDiscountCodeToDb = require("../utilities/saveDiscountCodeToDb");
+const Discount = require("../modal/Discount");
 
 exports.createCourse = async (req, res, next) => {
   try {
@@ -58,7 +59,7 @@ exports.createCourse = async (req, res, next) => {
       boxTwoTitle,
       boxThreeTitle,
     } = req.body;
-    
+
     const sendProudcts = await CoursesDB.create({
       name,
       description,
@@ -147,32 +148,59 @@ exports.updateCourser = async (req, res, next) => {
     course,
   });
 };
-
-exports.deleteCourse = async (req, res, next) => {
- try{
-  const id = req.params.id;
-  let course = await CoursesDB.findById(id);
-  console.log(course);
-  if (!course) {
-    res.status(500).send({
+exports.validatePromo = async (req, res, next) => {
+  const { code } = req.params;
+  const discount = await Discount.findOne({ code });
+  if (discount) {
+    res.status(200).json({
+      success: true,
+      discount,
+    });
+  } else {
+    res.status(400).json({
       success: false,
-      message: "Course Not found",
+      message: "Invalid Promo Code",
     });
   }
-  else{
-    await course.remove();
-  res.status(200).send({
-    success: true,
-    message: "Course Delete Successfull",
-  });
-  }
- }
-
- catch(e){
-
- }
 };
 
+exports.deleteCourse = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    let course = await CoursesDB.findById(id);
+    console.log(course);
+    if (!course) {
+      res.status(500).send({
+        success: false,
+        message: "Course Not found",
+      });
+    }
+    else {
+      await course.remove();
+      res.status(200).send({
+        success: true,
+        message: "Course Delete Successfull",
+      });
+    }
+  }
+
+  catch (e) {
+
+  }
+};
+exports.deleteCouponCode=async(req,res,next)=>{
+    try {
+    const id=req.params.id;
+  const cuponDelete=await Discount.findByIdAndDelete(id);
+  res.json({
+    success: true,
+  
+  });
+  }
+  catch (e) {
+    res.json({success:false})
+  }
+}
 exports.getCourseDetels = async (req, res, next) => {
   const id = req.params.id;
   const course = await CoursesDB.findById(id);
@@ -182,31 +210,42 @@ exports.getCourseDetels = async (req, res, next) => {
   });
 };
 
-exports.myActiveCourses = async (req , res , next) =>{
-  const course = await CoursesDB.find({email: req.params.email})
+exports.myActiveCourses = async (req, res, next) => {
+  const course = await CoursesDB.find({ email: req.params.email })
   console.log(course)
-  res.send({success: true , course})
+  res.send({ success: true, course })
 
 }
 
-exports.allPayments = async (req, res, next) =>{
-  try{
+exports.allPayments = async (req, res, next) => {
+  try {
     const payments = await Payment.find()
     console.log(payments)
-    res.send({success: true , payments})
+    res.send({ success: true, payments })
   }
-  catch(e){
+  catch (e) {
     console.log(e);
   }
- 
+
 }
-exports.generateCuponCode = async (req , res , next) =>{
-  const { amount } = req.body;
+exports.getAllPromoCode = async (req, res, next) => {
+  try {
+    const promeCode = await Discount.find()
+    console.log(promeCode)
+    res.send({ success: true, promeCode })
+  }
+  catch (e) {
+    console.log(e);
+  }
+}
+exports.generateCuponCode = async (req, res, next) => {
+  console.log(req.body);
+  const { amount } = req.params;
   // generate discount code logic
   const discountCode = generateDiscountCode(amount);
   // save discount code to database
+  console.log(discountCode);
   saveDiscountCodeToDb(discountCode);
-  console.log(discountCode)
-  res.json({ discountCode });
+  // res.json({ discountCode });
 
 }
