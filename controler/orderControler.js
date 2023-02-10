@@ -250,11 +250,12 @@ exports.paymentHendler = async (req, res, next) => {
       // country,,
       paidPrice,
       emails,
+
     } = req.body;
     const { id } = orderItems;
     const { name, email, address, country } = shippingInfo;
 
-    console.log(emails);
+    console.log(req.body.emails);
     const order = await Payment.create({
       productId: id,
       name,
@@ -269,7 +270,7 @@ exports.paymentHendler = async (req, res, next) => {
         $set: { status: "PAID" },
       }
     );
-    console.log(req.body);
+    console.log(makeAdmin);
     if (makeAdmin.modifiedCount > 0) {
       res.status(200).json({
         success: true,

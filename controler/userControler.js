@@ -4,6 +4,7 @@ const sendToken = require("../utilities/sendToken");
 exports.userRegister = async (req, res, next) => {
   try {
     const { name, email, role, adviserUserName } = req.body;
+    console.log(req.body);
     const user = await UserDB.findOne({ email: email });
     if (user)
       return res
@@ -37,7 +38,7 @@ exports.getAllUser = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 10;
     // const search = req.query.search || "";
     const user = await UserDB.find({
-      $and: [{ role: "user" }],
+      $and: [{ role: "User" }],
     })
       .skip(page * limit)
       .limit(limit);
