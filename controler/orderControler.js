@@ -7,7 +7,8 @@ const stripe = require("stripe")(
 );
 exports.newOrder = async (req, res, next) => {
   try {
- 
+  
+    console.log(req.body)
     const { shippingInfo, orderItems } = req.body;
     const { quantity , id } = orderItems;
     const { name, email } = shippingInfo;
@@ -104,6 +105,7 @@ exports.orderDeleteCourse = async (req, res, next) => {
 exports.myCourses = async (req, res, next) => {
   try {
     const email = req.params.email;
+    console.log(email)
 
     const order = await OrderDB.find({ email: email }).populate("productId");
     console.log(order);

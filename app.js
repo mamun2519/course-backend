@@ -29,7 +29,7 @@ app.use("/api/v1/order", orderRouter);
 app.use("/api/v1/contect", contectHandeler);
 
 // paypal payment get way intergation
-app.post("/pay", (req, res) => {
+app.get("/pay", (req, res) => {
 
    const {price} = req.query
 

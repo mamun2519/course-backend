@@ -83,7 +83,9 @@ exports.getAllOwner = async (req, res, next) => {
 exports.getSingleUser = async (req, res, next) => {
   try {
     const id = req.params.id;
+    console.log(id)
     const user = await UserDB.findById(id);
+    
 
     if (!user) {
       res.status(404).json({
@@ -123,8 +125,10 @@ exports.deleteUser = async (req, res, next) => {
 exports.createAdmin = async (req, res, next) => {
   try {
     const email = req.params.email;
-    console.log(email);
+    
+   
     const adminRequester = req.decoded.email;
+   
     const requestAdmin = await UserDB.findOne({ email: adminRequester });
     if (requestAdmin.role == "owner") {
       const roleAction = req.query.roleAction;

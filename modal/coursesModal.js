@@ -12,8 +12,8 @@ const courcesShema = new mongoose.Schema({
   },
   price: {
     type: String,
-    required: [true, "Please Enter product Price"],
-    maxLength: [8, "Price cannot exceed 8 characters"],
+    // required: [true, "Please Enter product Price"],
+    // maxLength: [8, "Price cannot exceed 8 characters"],
   },
   status:{
     type: String,

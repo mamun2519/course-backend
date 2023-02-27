@@ -9,12 +9,15 @@ const {
   generateCuponCode,
   getAllPromoCode,
   validatePromo,
-  deleteCouponCode
+  deleteCouponCode,
+  appCreateCourse
 } = require("../controler/coursesControler");
+
 
 const router = express.Router();
 
 router.post("/course", createCourse);
+router.post("/course/app", appCreateCourse);
 router.post("/course/generate-discount-code/:amount", generateCuponCode);
 router.delete("/course/delete-discount-code/:id", deleteCouponCode);
 router.get("/course/validatePromo/:code", validatePromo);

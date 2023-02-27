@@ -6,13 +6,15 @@ const Discount = require("../modal/Discount");
 
 exports.createCourse = async (req, res, next) => {
   try {
-    console.log(req.body)
+   console.log(req.body)
     if(req.body.images !== ""){
+     
     var myCloud = await cloudinary.v2.uploader.upload(req.body.images, {
       folder: "products",
       // width: 150,
       crop: "scale",
     });
+    console.log(myCloud)
   }
     if (req.body.boxOneImage !== "") {
       var CloudboxOneImage = await cloudinary.v2.uploader.upload(
@@ -55,6 +57,7 @@ exports.createCourse = async (req, res, next) => {
       Stock,
       about,
       goal,
+      price,
       mission,
       log,
       lat,
@@ -68,6 +71,7 @@ exports.createCourse = async (req, res, next) => {
       description,
       email,
       category,
+      price,
       courseTitle,
       Stock,
       about,
@@ -93,6 +97,74 @@ exports.createCourse = async (req, res, next) => {
       boxThreeImage: {
         public_id: CloudboxThreeImage?.public_id,
         url: CloudboxThreeImage?.secure_url,
+      },
+    });
+    res.status(200).json({
+      message: "Course Publish Successfull",
+      product: sendProudcts,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+// app course add route 
+exports.appCreateCourse = async (req, res, next) => {
+  try {
+    
+    const {
+      name,
+      description,
+      email,
+      category,
+      courseTitle,
+      Stock,
+      about,
+      goal,
+      price,
+      mission,
+      log,
+      lat,
+      images,
+      boxOneTitle,
+      boxTwoTitle,
+      boxThreeTitle,
+      boxOneImage,
+      boxTwoImage,
+      boxThreeImage
+    } = req.body;
+
+    const sendProudcts = await CoursesDB.create({
+      name,
+      description,
+      email,
+      category,
+      price,
+      courseTitle,
+      Stock,
+      about,
+      goal,
+      mission,
+      log: req?.body?.log == "NaN" ? 0 : log,
+      lat: req.body.lat == "NaN" ? 0 : lat,
+      boxOneTitle,
+      boxTwoTitle,
+      boxThreeTitle,
+      images: {
+        
+        url: images,
+      },
+      boxOneImage: {
+        // public_id: CloudboxOneImage?.public_id,
+        url: boxOneImage,
+      },
+      boxTwoImage: {
+        // public_id: CloudboxTwoImage?.public_id,
+        url: boxTwoImage,
+      },
+      boxThreeImage: {
+        // public_id: CloudboxThreeImage?.public_id,
+        url: boxThreeImage,
       },
     });
     res.status(200).json({
@@ -148,72 +220,74 @@ exports.updateCourser = async (req, res, next) => {
       boxTwoTitle,
       boxThreeTitle,
     } = req.body;
+    console.log(req.body)
    
     const id = req.params.id;
     let course = await CoursesDB.findById(id);
     console.log(course)
+   
   
-    // main imaage update
-    if (req.body.images !== "") {
-      const imgIds = course.images[0].public_id;
-      console.log(imgIds);
+    // // main imaage update
+    // if (req.body.images !== "") {
+    //   const imgIds = course.images[0].public_id;
+    //   console.log(imgIds);
       
      
-      if (imgIds) {
-        const result= await cloudinary.v2.uploader.destroy(imgIds);
-        console.log(result)
-      }
-      var newImage = await cloudinary.v2.uploader.upload(req.body.images, {
-        folder: "products",
-        // width: 150,
-        crop: "scale",
-      });
-    }
+    //   if (imgIds) {
+    //     const result= await cloudinary.v2.uploader.destroy(imgIds);
+    //     console.log(result)
+    //   }
+    //   var newImage = await cloudinary.v2.uploader.upload(req.body.images, {
+    //     folder: "products",
+    //     // width: 150,
+    //     crop: "scale",
+    //   });
+    // }
   
-    if (req.body.boxOneImage !== "") {
-      const imgId1 = course.boxTwoImage.public_id;
-      if (imgId1) {
-      const {result} =  await cloudinary.v2.uploader.destroy(course.boxTwoImage.public_id);
-      console.log(result);
-      }
-      var CloudboxOneImage = await cloudinary.v2.uploader.upload(
-        req.body.boxOneImage,
-        {
-          folder: "products",
-          // width: 150,
-          crop: "scale",
-        }
-      );
-    }
-    if (req.body.boxTwoImage !== "") {
-      const imgId2 = course.boxTwoImage.public_id;
-      if (imgId2) {
-        await cloudinary.v2.uploader.destroy(imgId2);
-      }
+    // if (req.body.boxOneImage !== "") {
+    //   const imgId1 = course.boxTwoImage.public_id;
+    //   if (imgId1) {
+    //   const {result} =  await cloudinary.v2.uploader.destroy(course.boxTwoImage.public_id);
+    //   console.log(result);
+    //   }
+    //   var CloudboxOneImage = await cloudinary.v2.uploader.upload(
+    //     req.body.boxOneImage,
+    //     {
+    //       folder: "products",
+    //       // width: 150,
+    //       crop: "scale",
+    //     }
+    //   );
+    // }
+    // if (req.body.boxTwoImage !== "") {
+    //   const imgId2 = course.boxTwoImage.public_id;
+    //   if (imgId2) {
+    //     await cloudinary.v2.uploader.destroy(imgId2);
+    //   }
 
-      var CloudboxTwoImage = await cloudinary.v2.uploader.upload(
-        req.body.boxTwoImage,
-        {
-          folder: "products",
-          // width: 150,
-          crop: "scale",
-        }
-      );
-    }
-    if (req.body.boxThreeImage !== "") {
-      const imgId3 = course.boxThreeImage.public_id;
-      if (imgId3) {
-        await cloudinary.v2.uploader.destroy(imgId3);
-      }
-      var CloudboxThreeImage = await cloudinary.v2.uploader.upload(
-        req.body.boxThreeImage,
-        {
-          folder: "products",
-          // width: 150,
-          crop: "scale",
-        }
-      );
-    }
+    //   var CloudboxTwoImage = await cloudinary.v2.uploader.upload(
+    //     req.body.boxTwoImage,
+    //     {
+    //       folder: "products",
+    //       // width: 150,
+    //       crop: "scale",
+    //     }
+    //   );
+    // }
+    // if (req.body.boxThreeImage !== "") {
+    //   const imgId3 = course.boxThreeImage.public_id;
+    //   if (imgId3) {
+    //     await cloudinary.v2.uploader.destroy(imgId3);
+    //   }
+    //   var CloudboxThreeImage = await cloudinary.v2.uploader.upload(
+    //     req.body.boxThreeImage,
+    //     {
+    //       folder: "products",
+    //       // width: 150,
+    //       crop: "scale",
+    //     }
+    //   );
+    // }
   
     if (!course) {
       res.status(500).json({
@@ -224,38 +298,25 @@ exports.updateCourser = async (req, res, next) => {
   
     course = await CoursesDB.findByIdAndUpdate(
       id,
-      {
-        name,
-        description,
-        email,
-        category,
-        courseTitle,
-        Stock,
-        about,
-        goal,
-        mission,
-        log,
-        lat,
-        boxOneTitle,
-        boxTwoTitle,
-        boxThreeTitle,
-        images: {
-          public_id: newImage.public_id,
-          url: newImage.secure_url,
-        },
-        boxOneImage: {
-          public_id: CloudboxOneImage?.public_id,
-          url: CloudboxOneImage?.secure_url,
-        },
-        boxTwoImage: {
-          public_id: CloudboxTwoImage?.public_id,
-          url: CloudboxTwoImage?.secure_url,
-        },
-        boxThreeImage: {
-          public_id: CloudboxThreeImage?.public_id,
-          url: CloudboxThreeImage?.secure_url,
-        },
-      },
+      
+        req.body
+        // images: {
+        //   public_id: newImage.public_id,
+        //   url: newImage.secure_url,
+        // },
+        // boxOneImage: {
+        //   public_id: CloudboxOneImage?.public_id,
+        //   url: CloudboxOneImage?.secure_url,
+        // },
+        // boxTwoImage: {
+        //   public_id: CloudboxTwoImage?.public_id,
+        //   url: CloudboxTwoImage?.secure_url,
+        // },
+        // boxThreeImage: {
+        //   public_id: CloudboxThreeImage?.public_id,
+        //   url: CloudboxThreeImage?.secure_url,
+        // },
+      ,
       {
         new: true,
         runValidators: true,
@@ -264,7 +325,7 @@ exports.updateCourser = async (req, res, next) => {
       
     );
   
-   
+  
   
     res.status(200).json({
       success: true,
@@ -278,6 +339,7 @@ exports.updateCourser = async (req, res, next) => {
 };
 exports.validatePromo = async (req, res, next) => {
   const { code } = req.params;
+  console.log(code)
   const discount = await Discount.findOne({ code });
   if (discount) {
     res.status(200).json({
@@ -295,6 +357,7 @@ exports.validatePromo = async (req, res, next) => {
 exports.deleteCourse = async (req, res, next) => {
   try {
     const id = req.params.id;
+    console.log(id)
     let course = await CoursesDB.findById(id);
     console.log(course);
     if (!course) {
@@ -332,6 +395,7 @@ exports.getCourseDetels = async (req, res, next) => {
 };
 
 exports.myActiveCourses = async (req, res, next) => {
+  console.log(req.params.email)
   const course = await CoursesDB.find({ email: req.params.email });
   console.log(course);
   res.send({ success: true, course });

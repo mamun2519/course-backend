@@ -23,7 +23,7 @@ router.get("/owner", getAllOwner);
 router.get("/single/:id", getSingleUser);
 router.delete("/delete/:id", deleteUser);
 router.put("/admin/:email", verifayToken, createAdmin);
-router.put("/remove/:email",verifayToken, removeAdmin);
+router.put("/remove/:email", removeAdmin);
 router.get("/chackAdmin/:email", cheackAdmin);
 router.get("/chackAdviser/:email", cheackAdviser);
 module.exports = router;

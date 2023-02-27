@@ -1,8 +1,12 @@
 const ContectDB = require("../modal/contectModal");
 
+
 exports.createContect = async (req, res, next) => {
   try {
+  
     const { name, phone, email, subject, message } = req.body;
+ 
+   
     const sendProudcts = await ContectDB.create({
       name,
       phone,
