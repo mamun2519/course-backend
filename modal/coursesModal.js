@@ -106,45 +106,7 @@ const courcesShema = new mongoose.Schema({
     type: String,
   },
 
-  //     brand: {
-  //       type: String,
-  //       required: true,
-  //     },
-  //     reviews: [
-  //       {
-  //         user: {
-  //           type: mongoose.Schema.ObjectId,
-  //           ref: "User",
-  //           required: true,
-  //         },
-  //         rating: {
-  //           type: Number,
-  //           required: true,
-  //         },
-  //         comment: {
-  //           type: String,
-  //           required: true,
-  //         },
-  //         name: {
-  //           type: String,
-  //           required: true,
-  //         },
-  //         profileUrl: {
-  //           type: String,
-  //           required: true,
-  //         },
-  //         time: {
-  //           type: String,
-  //           required: true,
-  //         },
-  //       },
-  //     ],
-  //     // product ta je uplode korse ta callet korar jonno
-  //     user: {
-  //       type: mongoose.Schema.ObjectId,
-  //       ref: "User",
-  //       required: true,
-  //     },
+ 
   createdAt: {
     type: Date,
     default: Date.now,

@@ -175,7 +175,7 @@ exports.appCreateCourse = async (req, res, next) => {
     console.log(e);
   }
 };
-
+// https://golf-b0226.web.app/
 exports.getAllCourse = async (req, res, next) => {
   try {
     const { category, kewword } = req.query;
@@ -213,12 +213,17 @@ exports.updateCourser = async (req, res, next) => {
       Stock,
       about,
       goal,
+      price,
       mission,
       log,
       lat,
+      images,
       boxOneTitle,
       boxTwoTitle,
       boxThreeTitle,
+      boxOneImage,
+      boxTwoImage,
+      boxThreeImage
     } = req.body;
     console.log(req.body)
    
@@ -299,7 +304,33 @@ exports.updateCourser = async (req, res, next) => {
     course = await CoursesDB.findByIdAndUpdate(
       id,
       
-        req.body
+        {name,
+          description,
+          email,
+          category,
+          courseTitle,
+          Stock,
+          about,
+          goal,
+          price,
+          mission,
+          log,
+          lat,
+          images:{
+            url: images
+          },
+          boxOneTitle,
+          boxTwoTitle,
+          boxThreeTitle,
+          boxOneImage:{
+            url: boxOneImage
+          },
+          boxTwoImage:{
+            url: boxTwoImage
+          },
+          boxThreeImage:{
+            url: boxThreeImage
+          }}
         // images: {
         //   public_id: newImage.public_id,
         //   url: newImage.secure_url,
