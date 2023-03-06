@@ -13,14 +13,14 @@ const {
   appCreateCourse
 } = require("../controler/coursesControler");
 
-// router 
+// router model
 const router = express.Router();
 
 router.post("/course", createCourse);
 router.post("/course/app", appCreateCourse);
 router.post("/course/generate-discount-code/:amount", generateCuponCode);
 router.delete("/course/delete-discount-code/:id", deleteCouponCode);
-router.get("/course/validatePromo/:code", validatePromo);
+router.post("/course/validatePromo/:code", validatePromo);
 router.get("/course", getAllCourse);
 router.get("/course/getAllPromoCode", getAllPromoCode);
 router.get("/course/:id", getCourseDetels);
