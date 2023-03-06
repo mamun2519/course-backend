@@ -13,7 +13,7 @@ const {
   appCreateCourse
 } = require("../controler/coursesControler");
 
-
+// router 
 const router = express.Router();
 
 router.post("/course", createCourse);
